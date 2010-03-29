@@ -1,3 +1,8 @@
-= labels
+= Lables RedMine plugin
 
-Description goes here
+ Brings labels support to RedMine.
+
+= Authors
+
+ Pavel A. Yaskevich 
+ Max O. Gilinsky
