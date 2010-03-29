@@ -1,0 +1,40 @@
+<style>
+
+  ul.label-list {
+    list-style: none;
+  }
+
+  ul.label-list li {
+    display: inline;
+  }
+
+  .kill_overflow-x {
+    overflow-x: visible !important;
+  }
+
+</style>
+
+<div id="labels">
+  <ul class="label-list">
+    <% for l in Label.global + Label.by_user(User.current) %>
+      <li><%= l.title %> (<%= l.issues.count %>)</li>
+    <% end %>
+    <li><%= link_to_function '+', '' %></li>
+  </ul>
+</div>
+
+<script type="text/javascript">
+  document.observe("dom:loaded", function() {
+    $$('.autoscroll')[0].addClassName('kill_overflow-x');
+
+    $$('td.add-filter')[0].insert({ bottom: $("labels") });
+    
+    <% for i in issues %>
+      var link = $$("#issue-<%= i.id %> td a")[0];
+      new Draggable(link, { revert : true });
+    <% end %>
+  });
+</script>
+
+<%= render :file => RAILS_ROOT + "/app/views/issues/_list.rhtml",
+      :locals => { :query => query, :issues => issues } %>
