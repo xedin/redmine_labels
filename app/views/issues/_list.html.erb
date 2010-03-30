@@ -1,17 +1,28 @@
-<style>
-
+<style>  
   ul.label-list {
     list-style: none;
   }
 
   ul.label-list li {
     display: inline;
+    margin-left: 7px;
   }
 
   .kill_overflow-x {
     overflow-x: visible !important;
   }
+  
+  #manage-labels { border: 1px solid; }
+  #manage-labels table         { margin-bottom: 1.4em; width:100%; }
+  #manage-labels th            { font-weight: bold; }
+  #manage-labels thead th      { /*background: #c3d9ff;*/ }
+  #manage-labels th,td,caption { padding: 8px 10px 4px 5px;text-align:center; }
+  #manage-labels tr.even td    { background: #e5ecf9; }
+  #manage-labels tr { height: 25px; }
 
+  .label { 
+    padding: 5px;
+  }
 </style>
 
 <script type="text/javascript">
@@ -30,22 +41,65 @@
       }
     });
   }
+
+  function updateLabel(labelId) {
+    var lTitle = $('title-' + labelId).value;
+    var fnColor = $('fncolor-' + labelId).value;
+    var bgColor = $('bgcolor-' + labelId).value;
+
+    new Ajax.Request("/labels/" + labelId, {
+      method: 'put',
+      parameters: { 
+        'label[title]' : lTitle,
+        'label[fncolor]' : fnColor,
+        'label[bgcolor]' : bgColor
+      }
+    });
+  }
 </script>
+
+<% @labels = Label.global + Label.by_user(User.current) %>
 
 <div id="labels">
   <ul class="label-list">
-    <% for l in Label.global + Label.by_user(User.current) %>
-      <li id="label-<%= l.id %>">
-        <%= l.title %>
-        (<span id="label-<%= l.id %>-issues-count"><%= l.issues.count %></span>)
+    <% for l in @labels %>
+      <li id="label-<%= l.id %>" class="label" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
+          <%= link_to l.title, label_path(l), :style => "color: #{l.fncolor}" %>
+          (<span id="label-<%= l.id %>-issues-count"><%= l.issues.count %></span>)
       </li>
-
-      <script type="text/javascript">
-        makeDroppable("label-<%= l.id %>");
-      </script>
+      <script type="text/javascript">makeDroppable("label-<%= l.id %>");</script>
     <% end %>
-    <li><%= link_to_function '+', '' %></li>
+
+    <li><%= link_to_function '+', '$("manage-labels").toggle()' %></li>
   </ul>
+
+  <div id="manage-labels" style="display: none;">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Title</th>
+          <th>Font</th>
+          <th>Background</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for l in @labels %>
+          <tr>
+            <td><div style="color: <%= l.fncolor %>; background:<%= l.bgcolor %>" class="label"><%= l.title %></div></td>
+            <td><%= text_field_tag 'ttl', l.title, :id => "title-#{l.id}" %></td>
+            <td><%= text_field_tag 'fnc', l.fncolor, :id => "fncolor-#{l.id}" %></td>
+            <td><%= text_field_tag 'bgc', l.bgcolor, :id => "bgcolor-#{l.id}" %></td>
+            <td>
+              [<%= link_to_function 'Apply',  "updateLabel(#{l.id})" %>]
+              [<%= link_to_function 'Delete', "deleteLabel(#{l.id})" %>]
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script type="text/javascript">
