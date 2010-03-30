@@ -7,3 +7,16 @@ Redmine::Plugin.register :redmine_labels do
   version '0.0.1'
 end
 
+ActionController::Routing::Routes.draw do |map|
+  map.resources :labels, :member => { :add_issue => :post }
+end
+
+class << ActionController::Routing::Routes
+
+  def reload!
+    ActionController::Routing.use_controllers!(nil)
+    load_routes!
+  end
+    
+end
+

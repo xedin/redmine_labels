@@ -14,10 +14,35 @@
 
 </style>
 
+<script type="text/javascript">
+  function makeDroppable(elementId) {
+    Droppables.add(elementId, {
+      onDrop: function(issue, label, event) {
+        var labelId = label.readAttribute('id').split('-')[1];
+
+        var url = "/labels/" + labelId + "/add_issue";
+        new Ajax.Request(url, { 
+          method: 'post', 
+          parameters: {
+            'issue_id': issue.readAttribute('id') 
+          }  
+        });
+      }
+    });
+  }
+</script>
+
 <div id="labels">
   <ul class="label-list">
     <% for l in Label.global + Label.by_user(User.current) %>
-      <li><%= l.title %> (<%= l.issues.count %>)</li>
+      <li id="label-<%= l.id %>">
+        <%= l.title %>
+        (<span id="label-<%= l.id %>-issues-count"><%= l.issues.count %></span>)
+      </li>
+
+      <script type="text/javascript">
+        makeDroppable("label-<%= l.id %>");
+      </script>
     <% end %>
     <li><%= link_to_function '+', '' %></li>
   </ul>
@@ -31,6 +56,10 @@
     
     <% for i in issues %>
       var link = $$("#issue-<%= i.id %> td a")[0];
+      
+      link.setAttribute("id", <%= i.id %>);
+      link.setAttribute("href", "#");
+
       new Draggable(link, { revert : true });
     <% end %>
   });
