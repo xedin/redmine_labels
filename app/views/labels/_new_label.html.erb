@@ -1,0 +1,9 @@
+<tr>
+  <td>New Label</td>
+  <td><%= text_field_tag 'ttl', '', :id => "new-title" %></td>
+  <td><%= text_field_tag 'fnc', '#000000', :id => "new-fncolor" %></td>
+  <td><%= text_field_tag 'bgc', '#ffffff', :id => "new-bgcolor" %></td>
+  <td>
+    [<%= link_to_function 'Create',  "createLabel()" %>]
+  </td>
+</tr>

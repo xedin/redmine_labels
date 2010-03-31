@@ -13,7 +13,22 @@ class LabelsController < ApplicationController
       format.js
     end
   end
+
+  def create
+    @label = Label.new(params[:label])
+    @label.user = User.current
+    @label.save
+  end
   
+  def destroy
+    @label = Label.find(params[:id])
+    @label.destroy
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def add_issue
     @label = Label.find_by_id(params[:id])
     @issue = Issue.find_by_id(params[:issue_id])
@@ -28,5 +43,6 @@ class LabelsController < ApplicationController
     end
    
   end
+
   
 end

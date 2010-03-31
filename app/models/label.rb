@@ -5,11 +5,7 @@ class Label < ActiveRecord::Base
   
   validates_presence_of :title
   validates_presence_of :user_id
-
-  # just to have :)
-  User.class_eval do
-    has_many :labels
-  end  
+  validates_presence_of :fncolor, :bgcolor
 
   named_scope :global, :conditions => { :global => true }
   

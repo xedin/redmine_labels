@@ -56,6 +56,21 @@
       }
     });
   }
+
+  function createLabel() {
+    var lTitle = $('new-title').value;
+    var fnColor = $('new-fncolor').value;
+    var bgColor = $('new-bgcolor').value;
+
+    new Ajax.Request("/labels/", {
+      method: 'post',
+      parameters: { 
+        'label[title]' : lTitle,
+        'label[fncolor]' : fnColor,
+        'label[bgcolor]' : bgColor
+      }
+    });
+  }
 </script>
 
 <% @labels = Label.global + Label.by_user(User.current) %>
@@ -63,11 +78,7 @@
 <div id="labels">
   <ul class="label-list">
     <% for l in @labels %>
-      <li id="label-<%= l.id %>" class="label" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
-          <%= link_to l.title, label_path(l), :style => "color: #{l.fncolor}" %>
-          (<span id="label-<%= l.id %>-issues-count"><%= l.issues.count %></span>)
-      </li>
-      <script type="text/javascript">makeDroppable("label-<%= l.id %>");</script>
+      <%= render :partial => 'labels/label_list_item', :locals => { :l => l } %>
     <% end %>
 
     <li><%= link_to_function '+', '$("manage-labels").toggle()' %></li>
@@ -84,19 +95,9 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <% for l in @labels %>
-          <tr>
-            <td><div style="color: <%= l.fncolor %>; background:<%= l.bgcolor %>" class="label"><%= l.title %></div></td>
-            <td><%= text_field_tag 'ttl', l.title, :id => "title-#{l.id}" %></td>
-            <td><%= text_field_tag 'fnc', l.fncolor, :id => "fncolor-#{l.id}" %></td>
-            <td><%= text_field_tag 'bgc', l.bgcolor, :id => "bgcolor-#{l.id}" %></td>
-            <td>
-              [<%= link_to_function 'Apply',  "updateLabel(#{l.id})" %>]
-              [<%= link_to_function 'Delete', "deleteLabel(#{l.id})" %>]
-            </td>
-          </tr>
-        <% end %>
+      <tbody id="labels-tbody">
+        <%= render :partial => 'labels/new_label' %>
+        <%= render :partial => @labels %>
       </tbody>
     </table>
   </div>

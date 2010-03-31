@@ -1,0 +1,2 @@
+page.remove "label-#{@label.id}"
+page.remove "edit-label-#{@label.id}"

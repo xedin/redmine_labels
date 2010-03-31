@@ -1,1 +1,3 @@
-page.alert 'updated'
+unless @label.errors.empty?
+  page.alert 'Error!'
+end
