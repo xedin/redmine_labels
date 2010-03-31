@@ -2,7 +2,9 @@ unless @label.errors.empty?
   page.alert 'Error!'
 else
   page.insert_html :bottom, 'labels-tbody', :partial => @label
-  page.insert_html :bottom, 'label-list', :partial => 'labels/label_list_item', :locals => { :l => @label }
+  page.insert_html :top, 'label-list', :partial => 'labels/label_list_item', :locals => { :l => @label }
   page['new-title'].value = ''
+  page['new-fncolor'].value = '#000000'
+  page['new-bgcolor'].value = '#ffffff'
   page.visual_effect :highlight, "edit-label-#{@label.id}", :duration => 2
 end

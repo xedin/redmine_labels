@@ -35,7 +35,7 @@ class LabelsController < ApplicationController
     
     
     if @label && @issue
-      @label.issues << @issue unless @label.issues.find_by_id(@issue.id)
+      @label.issues_add(@issue)
     end
 
     respond_to do |format|

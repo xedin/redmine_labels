@@ -1,1 +1,1 @@
-page.replace_html "label-#{@label.id}-issues-count", @label.issues.count
+page.replace_html "label-#{@label.id}-issues-count", @label.issues_count

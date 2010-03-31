@@ -1,5 +1,5 @@
 <li id="label-<%= l.id %>" class="label" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
     <%= link_to l.title, label_path(l), :style => "color: #{l.fncolor}" %>
-    (<span id="label-<%= l.id %>-issues-count"><%= l.issues.count %></span>)
+    (<span id="label-<%= l.id %>-issues-count"><%= l.issues_count %></span>)
 </li>
 <script type="text/javascript">makeDroppable("label-<%= l.id %>");</script>

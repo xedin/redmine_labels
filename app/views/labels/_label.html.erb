@@ -1,5 +1,7 @@
 <tr id="edit-label-<%= label.id %>">
-  <td><div style="margin-left: 8px; color: <%= label.fncolor %>; background:<%= label.bgcolor %>" class="label"><%= label.title %></div></td>
+  <td id="label-<%= label.id %>-preview">
+    <%= render :partial => 'labels/preview', :locals => { :label => label } %>
+  </td>
   <td><%= text_field_tag 'ttl', label.title, :id => "title-#{label.id}" %></td>
   <td><%= text_field_tag 'fnc', label.fncolor, :id => "fncolor-#{label.id}" %></td>
   <td><%= text_field_tag 'bgc', label.bgcolor, :id => "bgcolor-#{label.id}" %></td>

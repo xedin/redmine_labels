@@ -76,7 +76,7 @@
 <% @labels = Label.global + Label.by_user(User.current) %>
 
 <div id="labels">
-  <ul class="label-list">
+  <ul class="label-list" id="label-list">
     <% for l in @labels %>
       <%= render :partial => 'labels/label_list_item', :locals => { :l => l } %>
     <% end %>
