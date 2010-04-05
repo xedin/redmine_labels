@@ -2,5 +2,8 @@ unless @label.errors.empty?
   page.alert 'Could not save label!'
 else
   page.replace_html "label-#{@label.id}-preview", :partial => 'preview', :locals => { :label => @label }
-  page << "$('label-#{@label.id}').setAttribute('style', 'background: #{@label.bgcolor}; color: #{@label.fncolor}');$$('#label-#{@label.id} a')[0].setAttribute('style', 'color: #{@label.fncolor}')"
+  page << %($('label-#{@label.id}').setAttribute('style', 'background: #{@label.bgcolor}; color: #{@label.fncolor}');
+    $$('#label-#{@label.id} a')[0].setAttribute('style', 'color: #{@label.fncolor}')
+    $$('#label-#{@label.id} a')[0].innerHTML = '#{@label.title}'
+  )
 end

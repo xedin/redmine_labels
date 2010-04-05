@@ -44,7 +44,9 @@ class Label < ActiveRecord::Base
       connection.execute <<-SQL
         INSERT INTO `issues_labels` VALUES(#{issue.id}, #{id})
       SQL
+      return true
     end
+    return false
   end
 
   def issues_find(param)
