@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_labels do
 end
 
 ActionController::Routing::Routes.draw do |map|
-  map.resources :labels, :member => { :add_issue => :post }
+  map.resources :labels, :member => { :add_issue => :post, :unlink => :post }
 end
 
 class << ActionController::Routing::Routes

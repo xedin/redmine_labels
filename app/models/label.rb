@@ -1,11 +1,6 @@
 class Label < ActiveRecord::Base
   
   belongs_to :user
-  # has_and_belongs_to_many :issues
-  #   :finder_sql => 
-  #     "SELECT * FROM `issues` INNER JOIN `issues_labels` ON `issues`.id = `issues_labels`.issue_id WHERE (`issues_labels`.label_id = #{@id} )",
-  #   :counter_sql =>
-  #     "SELECT count(*) AS count_all FROM `issues` INNER JOIN `issues_labels` ON `issues`.id = `issues_labels`.issue_id WHERE (`issues_labels`.label_id = #{@id} )"
   
   validates_presence_of :title
   validates_presence_of :user_id
@@ -18,10 +13,20 @@ class Label < ActiveRecord::Base
   named_scope :by_user, lambda { |user|
     { :conditions => { :global => false, :user_id => user } }
   }
-  
 
   # we were force to do it because on each request to habtm issues association we get
   # TypeError (can't dup NilClass) exception. Feel free to fix it if you can
+  
+  def self.list_by_issue(issue)
+    id = issue.is_a?(Issue) ? issue.id : issue
+    
+    label_ids = Label.find_by_sql <<-SQL
+      SELECT `issues_labels`.`label_id` AS id FROM `issues_labels` WHERE `issues_labels`.`issue_id` = #{id} 
+    SQL
+
+    label_ids.map { |l| l.send(:reload) }
+  end
+  
 
   def issues
     Issue.find_by_sql <<-SQL
@@ -58,7 +63,12 @@ class Label < ActiveRecord::Base
       WHERE (`issues_labels`.label_id = #{id} AND `issues_labels`.issue_id = #{issue_id})
     SQL
   end
-
+  
+  def unlink_issue(issue)
+    issue_id = issue.is_a?(Issue) ? issue.id : issue
+    connection.delete("DELETE FROM `issues_labels` WHERE `issues_labels`.`label_id` = #{id} AND `issues_labels`.`issue_id` = #{issue_id}", "Unlink Issue from Label")
+  end
+  
   alias :old_destroy :destroy
 
   def destroy
