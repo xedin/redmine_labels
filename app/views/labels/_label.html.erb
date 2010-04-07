@@ -1,13 +1,17 @@
-<tr id="edit-label-<%= label.id %>">
-  <td id="label-<%= label.id %>-preview">
-    <%= render :partial => 'labels/preview', :locals => { :label => label } %>
-  </td>
-  <td><%= text_field_tag 'ttl', label.title, :id => "title-#{label.id}" %></td>
-  <td><%= text_field_tag 'fnc', label.fncolor, :id => "fncolor-#{label.id}" %></td>
-  <td><%= text_field_tag 'bgc', label.bgcolor, :id => "bgcolor-#{label.id}" %></td>
-  <td><%= check_box_tag 'global', 1, label.global, :id => "global-#{label.id}" %></td>
-  <td>
-    [<%= link_to_function 'Apply',  "updateLabel(#{label.id})" %>]
-    [<%= link_to_remote 'Delete', :url => label_path(label), :method => :delete %>]
-  </td>
-</tr>
+<% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) or label.user == User.current %>
+  <tr id="edit-label-<%= label.id %>">
+    <td id="label-<%= label.id %>-preview">
+      <%= render :partial => 'labels/preview', :locals => { :label => label } %>
+    </td>
+    <td><%= text_field_tag 'ttl', label.title, :id => "title-#{label.id}" %></td>
+    <td><%= text_field_tag 'fnc', label.fncolor, :id => "fncolor-#{label.id}", :onclick => "startColorPicker(this)" %></td>
+    <td><%= text_field_tag 'bgc', label.bgcolor, :id => "bgcolor-#{label.id}", :onclick => "startColorPicker(this)" %></td>
+    <% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) %>
+      <td><%= check_box_tag 'global', 1, label.global, :id => "global-#{label.id}" %></td>
+    <% end %>
+    <td>
+      [<%= link_to_function 'Apply',  "updateLabel(#{label.id})" %>]
+      [<%= link_to_remote 'Delete', :url => label_path(label), :method => :delete %>]
+    </td>
+  </tr>
+<% end %>

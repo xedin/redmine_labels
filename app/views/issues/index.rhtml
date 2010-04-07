@@ -1,3 +1,7 @@
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'colorPicker' %>
+  <%= stylesheet_link_tag 'colorPicker' %>
+<% end %>
 <style>  
   ul.label-list {
     list-style: none;
@@ -90,7 +94,7 @@
     return null; 
   }
 
-  function addLabelToFilter(labelName) {
+  function addLabelToFilter(labelName, labelId) {
     var do_break = false;
 
     var options = $$('select#add_filter_select option');
@@ -109,11 +113,29 @@
     var input = row.select('input[type="text"]')[0];
 
     row.select('select option[value="~"]')[0].selected = true;
-    input.value = labelName;
+    if (labelId)
+      input.value = '"' + labelId + '"';
+
+    input.hide();
+
+    if (holder = $('filter-label-holder')) {
+      holder.innerHTML = labelName;
+    } else {
+      var cells = row.select('td');
+      cells[cells.length - 1].insert({bottom: '<span id="filter-label-holder" style="font-size: 1.2em; font-weight: bold">' + labelName + '</span>'});
+    }
+
+    if (labelId) {
+      $$('p.buttons a')[0].onclick();
+    }
   }
 </script>
 
 <% @labels = Label.global + Label.by_user(User.current) %>
+
+<script type="text/javascript">
+  var labelsHash = { <%= @labels.map {|l| "'\"#{l.id}\"': '#{l.title}'"}.join(',') %> };
+</script>
 
 <div id="labels" style="display: none">
   <ul class="label-list" id="label-list">
@@ -132,7 +154,9 @@
           <th>Title</th>
           <th>Font</th>
           <th>Background</th>
-          <th>Global?</th>
+          <% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) %>
+            <th>Global?</th>
+          <% end %>
           <th>Actions</th>
         </tr>
       </thead>
@@ -173,4 +197,11 @@
 
     new Draggable(link, { revert : true });
   <% end %>
+  
+  var row = findLabelsRow();
+  var input = row.select('input[type="text"]')[0];
+
+  if (input.value != '') {
+    addLabelToFilter(labelsHash[input.value]);
+  }
 </script>

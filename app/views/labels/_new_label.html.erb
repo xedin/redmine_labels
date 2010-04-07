@@ -1,9 +1,11 @@
 <tr>
   <td>New Label</td>
   <td><%= text_field_tag 'ttl', '', :id => "new-title" %></td>
-  <td><%= text_field_tag 'fnc', '#000000', :id => "new-fncolor" %></td>
-  <td><%= text_field_tag 'bgc', '#ffffff', :id => "new-bgcolor" %></td>
-  <td><%= check_box_tag 'global', 0, false, :id => "new-global" %></td>
+  <td><%= text_field_tag 'fnc', '#000000', :id => "new-fncolor", :onclick => "startColorPicker(this)" %></td>
+  <td><%= text_field_tag 'bgc', '#ffffff', :id => "new-bgcolor", :onclick => "startColorPicker(this)" %></td>
+  <% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) %>
+    <td><%= check_box_tag 'global', 0, false, :id => "new-global" %></td>
+  <% end %>
   <td>
     [<%= link_to_function 'Create',  "createLabel()" %>]
   </td>

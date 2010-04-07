@@ -62,3 +62,18 @@
     });
   </script>
 <% end %>
+
+<script type="text/javascript">
+  $$('.attributes tr th').each(function(el) {
+    if(el.innerHTML.toLowerCase() == 'label:') {
+      el.hide();
+      el.next().hide();
+    }
+  });
+
+  $$('#attributes div p label').each(function(el) {
+      if (el.innerHTML.toLowerCase() == 'label') {
+        el.parentNode.hide();
+      }
+  });
+</script>

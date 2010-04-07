@@ -6,18 +6,9 @@ class LabelsController < ApplicationController
   
   def update
     @label = Label.find_by_id(params[:id])
-    old_title = @label.title.dup
+    params[:label].delete!(:global) unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
 
-    if @label.update_attributes(params[:label])
-      unless old_title == @label.title
-        @label.issues.each do |issue|
-          labels_custom_field = issue.available_custom_fields.detect { |cf| cf.name.downcase == 'label' }
-          labels_custom_field_value = issue.custom_value_for(labels_custom_field)
-          labels_custom_field_value.value = labels_custom_field_value.value.gsub("#{old_title}|", "#{@label.title}|")
-          labels_custom_field_value.save
-        end
-      end
-    end
+    @label.update_attributes(params[:label])
 
     respond_to do |format|
       format.js
@@ -27,6 +18,7 @@ class LabelsController < ApplicationController
   def create
     @label = Label.new(params[:label])
     @label.user = User.current
+    @label.global = false unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
     @label.save
   end
   
@@ -49,7 +41,7 @@ class LabelsController < ApplicationController
         labels_custom_field = @issue.available_custom_fields.detect { |cf| cf.name.downcase == 'label' }
         @issue.custom_field_values
         labels_custom_field_value = @issue.custom_value_for(labels_custom_field)
-        labels_custom_field_value.value += "#{@label.title}|"
+        labels_custom_field_value.value += "\"#{@label.id}\" "
         labels_custom_field_value.save
       end
     end
@@ -69,7 +61,7 @@ class LabelsController < ApplicationController
 
       labels_custom_field = @issue.available_custom_fields.detect { |cf| cf.name.downcase == 'label' }
       labels_custom_field_value = @issue.custom_value_for(labels_custom_field)
-      labels_custom_field_value.value = labels_custom_field_value.value.gsub("#{@label.title}|", "")
+      labels_custom_field_value.value = labels_custom_field_value.value.gsub("\"#{@label.id}\" ", "")
       labels_custom_field_value.save
     end
 
