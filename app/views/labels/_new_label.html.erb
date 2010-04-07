@@ -3,6 +3,7 @@
   <td><%= text_field_tag 'ttl', '', :id => "new-title" %></td>
   <td><%= text_field_tag 'fnc', '#000000', :id => "new-fncolor" %></td>
   <td><%= text_field_tag 'bgc', '#ffffff', :id => "new-bgcolor" %></td>
+  <td><%= check_box_tag 'global', 0, false, :id => "new-global" %></td>
   <td>
     [<%= link_to_function 'Create',  "createLabel()" %>]
   </td>

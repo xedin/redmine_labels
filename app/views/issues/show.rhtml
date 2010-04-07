@@ -53,5 +53,12 @@
       tdForLabelList.insert({ top: $('label-list') });
       $('label-list').show();
     }
+
+    $$('.attributes tr th').each(function(el) {
+      if(el.innerHTML.toLowerCase() == 'label:') {
+        el.hide();
+        el.next().hide();
+      }
+    });
   </script>
 <% end %>

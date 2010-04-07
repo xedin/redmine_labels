@@ -39,7 +39,7 @@ class LabelsController < ApplicationController
     end
   end
 
-  def add_issue
+  def link
     @label = Label.find_by_id(params[:id])
     @issue = Issue.find_by_id(params[:issue_id])
     
@@ -66,6 +66,11 @@ class LabelsController < ApplicationController
 
     if @label and @issue
       @label.unlink_issue(@issue)
+
+      labels_custom_field = @issue.available_custom_fields.detect { |cf| cf.name.downcase == 'label' }
+      labels_custom_field_value = @issue.custom_value_for(labels_custom_field)
+      labels_custom_field_value.value = labels_custom_field_value.value.gsub("#{@label.title}|", "")
+      labels_custom_field_value.save
     end
 
     respond_to do |format|
