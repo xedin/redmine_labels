@@ -27,6 +27,7 @@ Dir.foreach(plugin_images_path) do |image|
 
   if File.file?(src_image)
     dest_image = File.join(images_path, image)
+    p "copying from #{src_image} to #{dest_image}"
     FileUtils.cp_r(src_image, dest_image)
   end
 end
