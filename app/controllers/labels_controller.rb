@@ -41,7 +41,7 @@ class LabelsController < ApplicationController
         labels_custom_field = @issue.available_custom_fields.detect { |cf| cf.name.downcase == 'label' }
         @issue.custom_field_values
         labels_custom_field_value = @issue.custom_value_for(labels_custom_field)
-        labels_custom_field_value.value += "\"#{@label.id}\" "
+        labels_custom_field_value.value = labels_custom_field_value.value.to_s + "\"#{@label.id}\" "
         labels_custom_field_value.save
       end
     end
