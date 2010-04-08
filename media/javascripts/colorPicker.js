@@ -534,6 +534,7 @@ function startColorPicker(inputObj)
 	   color_picker_div.style.left = colorPickerGetLeftPos(inputObj) + 'px';
 	   color_picker_div.style.width='250px';
 	   color_picker_div.style.heigth='190px';
+	   color_picker_div.style.zIndex='100000';
 	   color_picker_div.style.top = colorPickerGetTopPos(inputObj) + inputObj.offsetHeight + 2 + 'px';
 	   color_picker_div.id = 'The_colorPicker';
 	   color_picker_div.style.display='block';
