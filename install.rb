@@ -31,10 +31,4 @@ Dir.foreach(plugin_images_path) do |image|
   end
 end
 
-unless IssueCustomField.find_by_name('Label')
-  cf = IssueCustomField.new(:name => 'Label', :field_format => 'string', :is_for_all => true, :is_filter => true, :editable => true)
-  cf.trackers << Tracker.all
-  cf.save
-end
-
-puts 'Done - Installation complete!'
+puts "Done - Installation complete!\nPlease run `rake db:migrate:plugins` and `rake redmine_labels:create:custom_field`"
