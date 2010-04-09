@@ -124,7 +124,7 @@
 
     row.select('select option[value="~"]')[0].selected = true;
     if (labelId)
-      input.value = '"' + labelId + '"';
+      input.value = '|' + labelId + '|';
 
     input.hide();
 
@@ -204,7 +204,7 @@
     new Draggable(link, { revert : true });
   <% end %>
   
-  var labelsHash = { <%= @labels.map {|l| "'\"#{l.id}\"': '#{l.title}'"}.join(',') %> };
+  var labelsHash = { <%= @labels.map {|l| "'|#{l.id}|': '#{l.title}'"}.join(',') %> };
 
   var row = findLabelsRow();
   var input = row.select('input[type="text"]')[0];
