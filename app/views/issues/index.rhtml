@@ -54,8 +54,8 @@
     var lTitle = $('title-' + labelId).value;
     var fnColor = $('fncolor-' + labelId).value;
     var bgColor = $('bgcolor-' + labelId).value;
-    if ($('new-global'))
-      var global = $('new-global').checked ? 1 : 0;
+    if ($('global-' + labelId))
+      var global = $('global-' + labelId).checked ? 1 : 0;
     else
       var global = 0;
 
