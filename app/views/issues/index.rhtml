@@ -54,7 +54,10 @@
     var lTitle = $('title-' + labelId).value;
     var fnColor = $('fncolor-' + labelId).value;
     var bgColor = $('bgcolor-' + labelId).value;
-    var global = $('global-' + labelId).checked ? 1 : 0;
+    if ($('new-global'))
+      var global = $('new-global').checked ? 1 : 0;
+    else
+      var global = 0;
 
     new Ajax.Request("/labels/" + labelId, {
       method: 'put',
@@ -71,7 +74,10 @@
     var lTitle = $('new-title').value;
     var fnColor = $('new-fncolor').value;
     var bgColor = $('new-bgcolor').value;
-    var global = $('new-global').checked ? 1 : 0;
+    if ($('new-global'))
+      var global = $('new-global').checked ? 1 : 0;
+    else
+      var global = 0;
 
     new Ajax.Request("/labels/", {
       method: 'post',

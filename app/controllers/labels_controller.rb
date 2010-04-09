@@ -6,7 +6,7 @@ class LabelsController < ApplicationController
   
   def update
     @label = Label.find_by_id(params[:id])
-    params[:label].delete!(:global) unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
+    params[:label].delete(:global) unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
 
     @label.update_attributes(params[:label])
 

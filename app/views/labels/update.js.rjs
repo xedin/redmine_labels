@@ -1,5 +1,5 @@
 unless @label.errors.empty?
-  page.alert 'Could not save label!'
+  page.alert "Error:\n" + @label.errors.map {|e| e.join(' ') }.join('\n')
 else
   page.replace_html "label-#{@label.id}-preview", :partial => 'preview', :locals => { :label => @label }
   page << %($('label-#{@label.id}').setAttribute('style', 'background: #{@label.bgcolor}; color: #{@label.fncolor}');

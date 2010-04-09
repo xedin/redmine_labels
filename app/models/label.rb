@@ -5,6 +5,8 @@ class Label < ActiveRecord::Base
   validates_presence_of :title
   validates_presence_of :user_id
   validates_presence_of :fncolor, :bgcolor
+  validates_uniqueness_of :title, :scope => :global, :if => :global?
+  validates_uniqueness_of :title, :scope => :user_id, :unless => :global?
 
   default_scope :order => 'id ASC'
 
