@@ -5,8 +5,9 @@ Redmine::Plugin.register :redmine_labels do
   author 'Pavel A. Yaskevich & Max O. Gilinsky'
   description 'Brings labels support to RedMine'
   version '0.0.1'
-  # permission :labels, {:labels => [:create, :update, :destroy, :add_issue]}, :public => true
+
   permission :manage_global_labels, :labels => [:create, :update]
+  permission :view_labels, :labels => []
 end
 
 ActionController::Routing::Routes.draw do |map|

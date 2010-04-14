@@ -1,66 +1,70 @@
-<style>
-  ul.label-list {
-    list-style: none;
-    -webkit-padding-start: 0px;
-  }
+<% if User.current.allowed_to?(:view_labels, nil, :global => true) %>
+  <style>
+    ul.label-list {
+      list-style: none;
+      -webkit-padding-start: 0px;
+    }
 
-  ul.label-list li {
-    display: inline;
-    margin-left: 7px;
-  }
+    ul.label-list li {
+      display: inline;
+      margin-left: 7px;
+    }
 
-  .label { 
-    padding: 5px;
-  }
-</style>
+    .label { 
+      padding: 5px;
+    }
+  </style>
 
-<% @labels = Label.list_by_issue(@issue) %>
+  <% @labels = Label.list_by_issue(@issue) %>
 
-<% unless @labels.empty? %>
-  <ul class="label-list" id="label-list" style="display:none">
-    <% for l in @labels %>
-      <li id="label-<%= l.id %>" class="label" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
-        <%= h(l.title) %> <%= link_to_function '[x]', "unlinkLabel('#{l.id}', '#{@issue.id}')", :style => "color: #{l.fncolor}" %>
-      </li>
-    <% end %>
-  </ul>
+  <% unless @labels.empty? %>
+    <ul class="label-list" id="label-list" style="display:none">
+      <% for l in @labels %>
+        <li id="label-<%= l.id %>" class="label" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
+          <%= h(l.title) %> <%= link_to_function '[x]', "unlinkLabel('#{l.id}', '#{@issue.id}')", :style => "color: #{l.fncolor}" %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 <% end %>
 
 <%= render :file => "#{RAILS_ROOT}/app/views/issues/show.rhtml" %>
 
-<% unless @labels.empty? %>
-  <script type="text/javascript">
-    function unlinkLabel(labelId, issueId) {
-      new Ajax.Request('/labels/' + labelId + '/unlink', { 
-        method : 'post',
-        parameters : { 
-          'issue_id' : issueId
-        },
-        onComplete: function(transport) {
-          if(200 == transport.status) {
-            $('label-' + labelId).remove();
+<% if User.current.allowed_to?(:view_labels, nil, :global => true) %>
+  <% unless @labels.empty? %>
+    <script type="text/javascript">
+      function unlinkLabel(labelId, issueId) {
+        new Ajax.Request('/labels/' + labelId + '/unlink', { 
+          method : 'post',
+          parameters : { 
+            'issue_id' : issueId
+          },
+          onComplete: function(transport) {
+            if(200 == transport.status) {
+              $('label-' + labelId).remove();
+            }
           }
+        });
+      }
+
+      var attributesTable = $$(".attributes")[0];
+      attributesTable.insert({ bottom : "<tr><th style='vertical-align: middle;'>Labels</th><td id='td-for-label-list'></td></tr>" });
+      
+      var tdForLabelList = $('td-for-label-list');
+
+      if(tdForLabelList) {
+        tdForLabelList.insert({ top: $('label-list') });
+        $('label-list').show();
+      }
+
+      $$('.attributes tr th').each(function(el) {
+        if(el.innerHTML.toLowerCase() == 'label:') {
+          el.hide();
+          el.next().hide();
         }
       });
-    }
-
-    var attributesTable = $$(".attributes")[0];
-    attributesTable.insert({ bottom : "<tr><th style='vertical-align: middle;'>Labels</th><td id='td-for-label-list'></td></tr>" });
-    
-    var tdForLabelList = $('td-for-label-list');
-
-    if(tdForLabelList) {
-      tdForLabelList.insert({ top: $('label-list') });
-      $('label-list').show();
-    }
-
-    $$('.attributes tr th').each(function(el) {
-      if(el.innerHTML.toLowerCase() == 'label:') {
-        el.hide();
-        el.next().hide();
-      }
-    });
-  </script>
+    </script>
+  <% end %>
 <% end %>
 
 <script type="text/javascript">
