@@ -202,12 +202,11 @@
     var autoscroll = $$('.autoscroll')[0]
     if (autoscroll) {
       autoscroll.addClassName('kill_overflow-x');
-      /*autoscroll.insert({ top: $("labels") });*/
+    } else {
+      $$('.nodata')[0].setAttribute('style', 'clear: both');
     }
 
     $('query_form').insert({ after: $('labels')});
-
-
     $("labels").show();
 
     var plusPosition = $('add-label-link').positionedOffset();
