@@ -27,8 +27,8 @@
     <ul class="label-list" id="label-list" style="display:none">
       <% for l in @labels %>
         <li id="label-<%= l.id %>" class="label rounded" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
-          <%= link_to h(l.title), :controller => 'issues', :action => 'index', 
-                :set_filter => 1, "cf_#{cf_id}" => "|#{l.id}|", :status_id => '*', :sort => 'updated_on desc' %> 
+          <%= link_to h(l.title), { :controller => 'issues', :action => 'index', 
+            :set_filter => 1, "cf_#{cf_id}" => "|#{l.id}|", :status_id => '*', :sort => 'updated_on desc'}, :style => "color: #{l.fncolor}" %> 
           <%= link_to_function '[x]', "unlinkLabel('#{l.id}', '#{@issue.id}')", :style => "color: #{l.fncolor}" %>
         </li>
       <% end %>
