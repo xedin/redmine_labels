@@ -1,4 +1,5 @@
-<li id="label-<%= l.id %>" class="label-item" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
+&nbsp;&nbsp;
+<li id="label-<%= l.id %>" class="label-item rounded" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
     <%= link_to_function h(l.title), "addLabelToFilter(this.innerHTML, #{l.id})", :style => "color: #{l.fncolor}" %>
       (<span id="label-<%= l.id %>-issues-count"><%= l.issues_count %></span>)
 </li>
