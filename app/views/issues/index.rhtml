@@ -5,24 +5,31 @@
     <%= stylesheet_link_tag 'colorPicker' %>
   <% end %>
   <style>  
+    #labels {
+      margin:5px 0 15px;
+    }
+
     ul.label-list {
       list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
     ul.label-list li {
-      display: inline;
-      white-space: nowrap;
+      padding: 0 5px 15px 0;
+      display: block;
+      float: left;
+      line-height: 15px;
     }
 
     ul.label-list li a {
-      white-space: nowrap;
     } 
 
     .kill_overflow-x {
       overflow-x: visible !important;
     }
     
-    #manage-labels { border: 1px solid; background: #ffffff; padding-right: 8px; z-index: 10000; text-align: right }
+    #manage-labels { border: 1px solid; background: #ffffff; padding: 0 8px 10px 0; z-index: 10000; text-align: right }
     #manage-labels table         { margin-bottom: 1.4em; width:100%; }
     #manage-labels th            { font-weight: bold; }
     #manage-labels thead th      { /*background: #c3d9ff;*/ }
@@ -38,7 +45,6 @@
 
     .label-item { 
       padding: 5px;
-      line-height: 30px;
     }
     .label { 
       padding: 5px;
@@ -155,7 +161,7 @@
 
   <% @labels = Label.global + Label.by_user(User.current) %>
 
-  <div id="labels" style="display: none; float:right">
+  <div id="labels" style="display: none;">
     <ul class="label-list" id="label-list">
       <% for l in @labels %>
         <%= render :partial => 'labels/label_list_item', :locals => { :l => l } %>
@@ -196,9 +202,11 @@
     var autoscroll = $$('.autoscroll')[0]
     if (autoscroll) {
       autoscroll.addClassName('kill_overflow-x');
+      /*autoscroll.insert({ top: $("labels") });*/
     }
 
-    autoscroll.insert({ top: $("labels") });
+    $('query_form').insert({ after: $('labels')});
+
 
     $("labels").show();
 

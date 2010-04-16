@@ -2,8 +2,9 @@ unless @label.errors.empty?
   page.alert "Error:\n" + @label.errors.map {|e| e.join(' ') }.join('\n')
 else
   page.replace_html "label-#{@label.id}-preview", :partial => 'preview', :locals => { :label => @label }
-  page << %($('label-#{@label.id}').setAttribute('style', 'background: #{@label.bgcolor}; color: #{@label.fncolor}');
-    $$('#label-#{@label.id} a')[0].setAttribute('style', 'color: #{@label.fncolor}')
-    $$('#label-#{@label.id} a')[0].innerHTML = '#{@label.title}'
+  page << %(
+    $$('#label-#{@label.id} span')[0].setAttribute('style', 'background: #{@label.bgcolor}; color: #{@label.fncolor}');
+    $$('#label-#{@label.id} span a')[0].setAttribute('style', 'color: #{@label.fncolor}')
+    $$('#label-#{@label.id} span a')[0].innerHTML = '#{@label.title}'
   )
 end

@@ -1,6 +1,7 @@
-&nbsp;&nbsp;
-<li id="label-<%= l.id %>" class="label-item rounded" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
+<li id="label-<%= l.id %>">
+  <span class="label-item rounded" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
     <%= link_to_function h(l.title), "addLabelToFilter(this.innerHTML, #{l.id})", :style => "color: #{l.fncolor}" %>
-      (<span id="label-<%= l.id %>-issues-count"><%= l.issues_count %></span>)
+    (<span id="label-<%= l.id %>-issues-count"><%= l.issues_count %></span>)
+  </span>
 </li>
 <script type="text/javascript">makeDroppable("label-<%= l.id %>");</script>
