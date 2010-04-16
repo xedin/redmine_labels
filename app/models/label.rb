@@ -51,6 +51,11 @@ class Label < ActiveRecord::Base
       connection.execute <<-SQL
         INSERT INTO `issues_labels` VALUES(#{issue.id}, #{id})
       SQL
+
+      i = issue.is_a?(Issue) ? issue : Issue.find(issue)
+      i.init_journal(User.current, "Added '#{title}' #{global? ? 'global' : 'private'} label to this task.")
+      i.save
+
       return true
     end
     return false
@@ -69,11 +74,22 @@ class Label < ActiveRecord::Base
   def unlink_issue(issue)
     issue_id = issue.is_a?(Issue) ? issue.id : issue
     connection.delete("DELETE FROM `issues_labels` WHERE `issues_labels`.`label_id` = #{id} AND `issues_labels`.`issue_id` = #{issue_id}", "Unlink Issue from Label")
+
+    i = issue.is_a?(Issue) ? issue : Issue.find(issue)
+    i.init_journal(User.current, "Removed '#{title}' #{global? ? 'global' : 'private'} label from this task.")
+    i.save
   end
   
   alias :old_destroy :destroy
 
   def destroy
+    if global?
+      issues.each do |issue|
+        issue.init_journal(User.current, "Has deleted the '#{title}' global label, which was previously assigned to this task.")
+        issue.save
+      end
+    end
+
     old_destroy
     connection.delete("DELETE FROM `issues_labels` WHERE `issues_labels`.label_id = #{id}", "IssuesLabels Delete all")
   end
