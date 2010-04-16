@@ -13,15 +13,23 @@
     .label { 
       padding: 5px;
     }
+
+    .rounded {
+      -moz-border-radius: 4px 4px 4px 4px !important;
+      border-radius: 4px 4px 4px 4px !important;
+      -webkit-border-radius: 4px 4px 4px 4px !important;
+    }
   </style>
 
   <% @labels = Label.list_by_issue(@issue) %>
-
+  <% cf_id = CustomField.find_by_name('Label').id %>
   <% unless @labels.empty? %>
     <ul class="label-list" id="label-list" style="display:none">
       <% for l in @labels %>
-        <li id="label-<%= l.id %>" class="label" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
-          <%= h(l.title) %> <%= link_to_function '[x]', "unlinkLabel('#{l.id}', '#{@issue.id}')", :style => "color: #{l.fncolor}" %>
+        <li id="label-<%= l.id %>" class="label rounded" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
+          <%= link_to h(l.title), :controller => 'issues', :action => 'index', 
+                :set_filter => 1, "cf_#{cf_id}" => "|#{l.id}|", :status_id => '*', :sort => 'updated_on desc' %> 
+          <%= link_to_function '[x]', "unlinkLabel('#{l.id}', '#{@issue.id}')", :style => "color: #{l.fncolor}" %>
         </li>
       <% end %>
     </ul>
