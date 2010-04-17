@@ -56,12 +56,29 @@
       Droppables.add(elementId, {
         onDrop: function(issue, label, event) {
           var labelId = label.readAttribute('id').split('-')[1];
+          var issueId = issue.readAttribute('id');
 
           var url = "/labels/" + labelId + "/link";
+
+          var toSend;
+          if ($$('#issue-' + issueId + ' td.checkbox input')[0].checked) {
+            toSend = [];  
+
+            $$('.issues tr.issue td.checkbox input').each(function(input) {
+              if (input.checked) {
+                toSend.push(input.value);
+                input.checked = false;
+                input.parentNode.parentNode.removeClassName('context-menu-selection');
+              }
+            });
+          } else {
+            toSend = issueId;
+          }
+
           new Ajax.Request(url, { 
             method: 'post', 
             parameters: {
-              'issue_id': issue.readAttribute('id') 
+              'issue_ids[]': toSend
             }  
           });
         }
