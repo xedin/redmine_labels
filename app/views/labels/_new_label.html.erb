@@ -5,7 +5,9 @@
   <td><%= text_field_tag 'bgc', '#ffffff', :size => 7, :id => "new-bgcolor", :onclick => "startColorPicker(this)" %></td>
   <% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) %>
     <td><%= check_box_tag 'global', 0, false, :id => "new-global" %></td>
+    <td><%= check_box_tag 'archived', 0, false, :id => "new-archived" %></td>
   <% end %>
+
   <td>
     [<%= link_to_function 'Create',  "createLabel()" %>]
   </td>

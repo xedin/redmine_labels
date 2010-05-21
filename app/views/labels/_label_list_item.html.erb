@@ -1,4 +1,6 @@
-<li id="label-<%= l.id %>">
+<% archived = 'display: none;' if l.archived? %>
+
+<li id="label-<%= l.id %>" style="<%= archived %>">
   <span class="label-item rounded" style="background:<%= l.bgcolor %>; color: <%= l.fncolor %>">
     <%= link_to_function h(l.title), "addLabelToFilter(this.innerHTML, #{l.id})", :style => "color: #{l.fncolor}" %>
     (<span id="label-<%= l.id %>-issues-count"><%= l.issues_count %></span>)

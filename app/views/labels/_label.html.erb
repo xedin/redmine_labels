@@ -8,6 +8,7 @@
     <td><%= text_field_tag 'bgc', label.bgcolor, :size => 7, :id => "bgcolor-#{label.id}", :onclick => "startColorPicker(this)" %></td>
     <% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) %>
       <td><%= check_box_tag 'global', 1, label.global, :id => "global-#{label.id}" %></td>
+      <td><%= check_box_tag 'archived', 1, label.archived, :id => "archived-#{label.id}" %></td>
     <% end %>
     <td>
       [<%= link_to_function 'Apply',  "updateLabel(#{label.id})" %>]

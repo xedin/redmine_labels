@@ -11,7 +11,7 @@ class Label < ActiveRecord::Base
   default_scope :order => 'id ASC'
 
   named_scope :global, :conditions => { :global => true }
-  
+
   named_scope :by_user, lambda { |user|
     { :conditions => { :global => false, :user_id => user } }
   }

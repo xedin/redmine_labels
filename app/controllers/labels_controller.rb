@@ -6,7 +6,11 @@ class LabelsController < ApplicationController
   
   def update
     @label = Label.find_by_id(params[:id])
-    params[:label].delete(:global) unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
+
+    unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
+      params[:label].delete(:global)
+      params[:label].delete(:archived)
+    end
 
     @label.update_attributes(params[:label])
 
@@ -18,7 +22,12 @@ class LabelsController < ApplicationController
   def create
     @label = Label.new(params[:label])
     @label.user = User.current
-    @label.global = false unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
+  
+    unless User.current.allowed_to?(:manage_global_labels, nil, :global => true)
+      @label.global = false
+      @label.archived = false
+    end
+
     @label.save
   end
   

@@ -89,10 +89,16 @@
       var lTitle = $('title-' + labelId).value;
       var fnColor = $('fncolor-' + labelId).value;
       var bgColor = $('bgcolor-' + labelId).value;
+
       if ($('global-' + labelId))
         var global = $('global-' + labelId).checked ? 1 : 0;
       else
         var global = 0;
+
+      if($('archived-' + labelId))
+        var archived = $('archived-' + labelId).checked ? 1 : 0;
+      else
+        var archived = 0;
 
       new Ajax.Request("/labels/" + labelId, {
         method: 'put',
@@ -100,7 +106,8 @@
           'label[title]' : lTitle,
           'label[fncolor]' : fnColor,
           'label[bgcolor]' : bgColor,
-          'label[global]' : global
+          'label[global]' : global,
+          'label[archived]' : archived
         }
       });
     }
@@ -113,6 +120,11 @@
         var global = $('new-global').checked ? 1 : 0;
       else
         var global = 0;
+      
+      if($('new-archived'))
+        var archived = $('new-archived').checked ? 1 : 0;
+      else
+        var archived = 0;
 
       new Ajax.Request("/labels/", {
         method: 'post',
@@ -120,7 +132,8 @@
           'label[title]' : lTitle,
           'label[fncolor]' : fnColor,
           'label[bgcolor]' : bgColor,
-          'label[global]' : global
+          'label[global]' : global,
+          'label[archived]' : archived
         }
       });
     }
@@ -197,6 +210,9 @@
             <th>Background</th>
             <% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) %>
               <th>Global?</th>
+            <% end %>
+            <% if User.current.allowed_to?(:manage_global_labels, nil, :global => true) %>
+              <th>Archived?</th>
             <% end %>
             <th>Actions</th>
           </tr>

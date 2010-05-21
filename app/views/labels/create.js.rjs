@@ -1,6 +1,6 @@
-unless @label.errors.empty?
+if !@label.errors.empty?
   page.alert "Error:\n" + @label.errors.map {|e| e.join(' ') }.join('\n')
-else
+elsif !@label.archived?
   page.insert_html :bottom, 'labels-tbody', :partial => @label
   page.insert_html :top, 'label-list', :partial => 'labels/label_list_item', :locals => { :l => @label }
   page['new-title'].value = ''
